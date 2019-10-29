@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Twittler</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+  </head>
+  <body>
+    <section>
+      <h1> Your feed </h1>
+      <div id="tweets-container"></div>
+    </section>
+    <script>
+      $(document).ready(function(){
+        var index = streams.home.length - 1;
+        
+        while(index >= 0){
+          var tweet = streams.home[index];
+          var $tweetWrap = $('<div class="tweet-wrap"></div>');
+          var $tweet = $('<p class="tweet"></p>');
+
+          $tweet.html('<span data-username="' + tweet.user +'" class="user">@' + tweet.user + '</span> <span class="timestamp">' + tweet.created_at.toLocaleString() + '</span> <p>' + tweet.message + '</p>');
+          $tweetWrap.appendTo('#tweets-container');
+          $tweetWrap.append($tweet)
+          index -= 1;
+        } // End while loop
+
+        
+        /* 
+          function getNewTweets() 
+          Retuns an array with new tweets by slicing from the last index
+          and updates the index. 
+        */
+        function getNewTweets(){
+          var newTweets = [];
+          newTweets = streams.home.slice(index);
+          index = streams.home.length - 1;
+          return newTweets;
+        }
+
+        /*
+          function insertTweets() 
+          Accepts @param newTweets array inserts the new
+          tweets to the news feed (DOM).
+        */
+        function insertTweets(newTweets){
+          var dely = 1000;
+          for(var i in newTweets){
+              var tweet = newTweets[i];
+              if(tweet !== undefined){
+                var $tweetWrap = $('<div class="tweet-wrap"></div>');
+                var $tweet = $('<p class="tweet "></p>');
+                $tweet.html('<span data-username="' + tweet.user +'" class="user">@' + tweet.user + '</span> <span class="timestamp">' + tweet.created_at.toLocaleString() + '</span> <p>' + tweet.message + '</p>');
+                $tweetWrap.append($tweet)
+              $('#tweets-container').prepend($tweetWrap) 
+              //.hide().delay(dely).fadeIn(400);
+              //console.log(dely)
+                dely = dely === 8000 ? 1000: dely + 1000;
+              }
+            }
+        } 
+
+        $('body').on('click', '.user', function(){
+          goTo($(this).attr('data-username'))
+        }) 
+
+        function goTo(user){
+          $('#tweets-container').html('');
+          var tweets = streams.users[user];
+          console.log(tweets)
+          insertTweets(tweets);
+        }
+
+        /*
+          Updates the news feed every 5 seconds
+        */
+        setInterval(function() {
+          insertTweets(getNewTweets());
+        }, 8000);
+
+      });
+
+    </script>
+  </body>
+</html>
