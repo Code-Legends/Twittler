@@ -1,0 +1,35 @@
+.tweet-wrap {
+	margin: 50px;
+    padding: 0;
+    border: 1px solid #b3a79854 ;
+    background: #80CED7;
+}
+
+.tweet {
+	padding: 1.2em;
+}
+
+.timestamp {
+	float: right;
+}
+
+#tweets-container {
+	width: 50%;
+	margin: 0 auto;
+
+}
+
+h1 {
+	text-align: center;
+	font-family: monospace;
+}
+
+body {
+	color: #fff;
+	background: #CCDBDC;
+}
+
+.user {
+	text-decoration: underline;
+	color: #4D6064;
+}
